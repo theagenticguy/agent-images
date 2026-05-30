@@ -10,9 +10,9 @@ CONTEXT7_API_KEY = ""
 
 [tools]
 # Pinned versions — see CHANGELOG when bumping.
-"npm:@anthropic-ai/claude-code" = "1.0.30"
-"npm:opencode-ai" = "0.4.50"
-"npm:@upstash/context7-mcp" = "1.0.14"
+"npm:@anthropic-ai/claude-code" = "2.1.158"
+"npm:opencode-ai" = "1.15.12"
+"npm:@upstash/context7-mcp" = "3.0.0"
 
 [tasks.bootstrap-agent]
 description = "Install AF Python agent runtime dependencies."
