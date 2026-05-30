@@ -5,7 +5,7 @@ description = "Container image platform for coding agents — base, polyglot, an
 readme = "README.md"
 requires-python = ">=3.13"
 license = { text = "Apache-2.0" }
-authors = [{ name = "Laith Al-Saadoon", email = "lalsaado@amazon.com" }]
+authors = [ { name = "Laith Al-Saadoon", email = "lalsaado@amazon.com" } ]
 keywords = [
   "agentic",
   "coding-agent",
@@ -24,7 +24,7 @@ classifiers = [
   "Topic :: System :: Software Distribution",
   "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [  ]
 
 [project.urls]
 Homepage = "https://github.com/lalsaado/agent-images"
@@ -33,11 +33,11 @@ Issues = "https://github.com/lalsaado/agent-images/issues"
 Changelog = "https://github.com/lalsaado/agent-images/blob/main/CHANGELOG.md"
 
 [build-system]
-requires = ["hatchling>=1.27"]
+requires = [ "hatchling>=1.27" ]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/agent_images"]
+packages = [ "src/agent_images" ]
 
 [dependency-groups]
 dev = [
@@ -47,13 +47,14 @@ dev = [
   "pytest-cov>=6.0.0",
   "pytest-randomly>=3.16.0",
   "hypothesis>=6.123.0",
+  "tomli-w>=1.2.0",
 ]
 
 [tool.ruff]
 line-length = 100
 target-version = "py313"
-src = ["src", "tests"]
-extend-exclude = [".venv", "dist", "build"]
+src = [ "src", "tests" ]
+extend-exclude = [ ".venv", "dist", "build" ]
 
 [tool.ruff.lint]
 select = [
@@ -86,7 +87,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/**" = ["S", "ARG"]
+"tests/**" = [ "S", "ARG" ]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -94,7 +95,7 @@ docstring-code-format = true
 [tool.ty]
 
 [tool.ty.src]
-include = ["src", "tests"]
+include = [ "src", "tests" ]
 
 [tool.ty.rules]
 unresolved-import = "error"
@@ -102,7 +103,7 @@ invalid-type-form = "error"
 
 [tool.pytest.ini_options]
 minversion = "8.0"
-testpaths = ["tests"]
+testpaths = [ "tests" ]
 addopts = [
   "-ra",
   "--strict-config",
@@ -113,11 +114,11 @@ addopts = [
   "--cov-fail-under=80",
 ]
 xfail_strict = true
-filterwarnings = ["error"]
+filterwarnings = [ "error" ]
 
 [tool.coverage.run]
 branch = true
-source = ["src/agent_images"]
+source = [ "src/agent_images" ]
 parallel = true
 
 [tool.coverage.report]

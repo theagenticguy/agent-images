@@ -14,4 +14,4 @@ paths = [
   '''tests/fixtures/.*''',
   '''\.env\.example''',
 ]
-regexes = ['''AGENT_IMAGES_LOG_LEVEL=INFO''']
+regexes = [ '''AGENT_IMAGES_LOG_LEVEL=INFO''' ]

@@ -92,4 +92,4 @@ depends = [
 
 [tasks.ci]
 description = "What CI runs."
-depends = ["validate"]
+depends = [ "validate" ]
