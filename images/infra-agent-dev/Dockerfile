@@ -4,6 +4,11 @@
 ARG BASE_IMAGE=agent-images/software-agent-polyglot:local
 FROM ${BASE_IMAGE}
 
+LABEL org.opencontainers.image.source="https://github.com/theagenticguy/agent-images" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.title="agent-images/infra-agent-dev" \
+      org.opencontainers.image.description="Terraform / OpenTofu / CloudFormation family image."
+
 USER agent
 WORKDIR /tmp/af-build
 

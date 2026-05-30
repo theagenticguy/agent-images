@@ -4,6 +4,11 @@
 ARG UBUNTU_VERSION=26.04
 FROM ubuntu:${UBUNTU_VERSION}
 
+LABEL org.opencontainers.image.source="https://github.com/theagenticguy/agent-images" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.title="agent-images/base-mise" \
+      org.opencontainers.image.description="Ubuntu LTS + mise + core CLI tools."
+
 ARG USERNAME=agent
 ARG USER_UID=1000
 ARG USER_GID=1000
@@ -11,6 +16,9 @@ ARG USER_GID=1000
 ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
+
+# Use bash with pipefail for any RUN that pipes — hadolint DL4006.
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # hadolint ignore=DL3008,DL3009
 RUN apt-get update && \
@@ -55,7 +63,6 @@ ENV MISE_CONFIG_DIR=/home/${USERNAME}/.config/mise
 ENV MISE_CACHE_DIR=/home/${USERNAME}/.cache/mise
 ENV PATH=/home/${USERNAME}/.local/bin:/home/${USERNAME}/.local/share/mise/shims:${PATH}
 
-# hadolint ignore=DL4006
 RUN curl -fsSL https://mise.run | sh
 
 USER root

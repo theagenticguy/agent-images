@@ -41,13 +41,25 @@ jobs:
         with:
           persist-credentials: false
 
+      # Run hadolint directly instead of hadolint-action — the action emits
+      # every finding as a GHA `##[error]` annotation regardless of
+      # failure-threshold, which fails the step even on info-level findings.
       - name: Lint Dockerfiles
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          dockerfile: images/**/Dockerfile
-          recursive: true
-          config: .hadolint.yaml
-          failure-threshold: warning
+        run: |
+          docker run --rm -i \
+            -v "$PWD/.hadolint.yaml:/.config/hadolint.yaml:ro" \
+            -v "$PWD:/workspace:ro" \
+            -w /workspace \
+            hadolint/hadolint:2.12.0 \
+            hadolint --config /.config/hadolint.yaml --failure-threshold warning \
+              images/base-mise/Dockerfile \
+              images/software-agent-polyglot/Dockerfile \
+              images/node-agent-dev/Dockerfile \
+              images/python-agent-dev/Dockerfile \
+              images/monorepo-agent-dev/Dockerfile \
+              images/jvm-agent-dev/Dockerfile \
+              images/infra-agent-dev/Dockerfile \
+              images/security-agent-dev/Dockerfile
 
   bake:
     name: bake whole tree
@@ -79,7 +91,7 @@ jobs:
       - name: Smoke each family image
         run: |
           set -euo pipefail
-          for fam in node-agent-dev python-agent-dev jvm-agent-dev infra-agent-dev security-agent-dev; do
+          for fam in node-agent-dev python-agent-dev monorepo-agent-dev jvm-agent-dev infra-agent-dev security-agent-dev; do
             echo "::group::smoke $fam"
             docker run --rm "${REGISTRY}/${fam}:${VERSION}" \
               bash -lc 'mise --config /opt/af/mise.toml run agent-smoke'
@@ -105,7 +117,7 @@ jobs:
       - name: Render every family's merged mise.toml
         run: |
           set -euo pipefail
-          for fam in node-agent python-agent jvm-agent infra-agent security-agent; do
+          for fam in node-agent python-agent monorepo-agent jvm-agent infra-agent security-agent; do
             uv run python scripts/merge_mise.py \
               mise/base.toml \
               mise/polyglot.toml \

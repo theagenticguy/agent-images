@@ -7,6 +7,11 @@
 ARG BASE_IMAGE=agent-images/base-mise:local
 FROM ${BASE_IMAGE}
 
+LABEL org.opencontainers.image.source="https://github.com/theagenticguy/agent-images" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.title="agent-images/software-agent-polyglot" \
+      org.opencontainers.image.description="Polyglot runtimes + agent harness with Context7 MCP."
+
 USER root
 # hadolint ignore=DL3008
 RUN apt-get update && \

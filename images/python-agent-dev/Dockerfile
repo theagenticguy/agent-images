@@ -4,6 +4,11 @@
 ARG BASE_IMAGE=agent-images/software-agent-polyglot:local
 FROM ${BASE_IMAGE}
 
+LABEL org.opencontainers.image.source="https://github.com/theagenticguy/agent-images" \
+      org.opencontainers.image.licenses="Apache-2.0" \
+      org.opencontainers.image.title="agent-images/python-agent-dev" \
+      org.opencontainers.image.description="Python family image."
+
 USER root
 # hadolint ignore=DL3008
 RUN apt-get update && \
