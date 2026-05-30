@@ -39,7 +39,7 @@ COPY --chown=agent:agent mise/polyglot.toml ./mise/polyglot.toml
 COPY --chown=agent:agent mise/agent-harness.toml ./mise/agent-harness.toml
 COPY --chown=agent:agent mise/monorepo-agent.toml ./mise/monorepo-agent.toml
 
-RUN python3 ./merge_mise.py \
+RUN /opt/af/.merge-venv/bin/python ./merge_mise.py \
     ./mise/base.toml \
     ./mise/polyglot.toml \
     ./mise/agent-harness.toml \
