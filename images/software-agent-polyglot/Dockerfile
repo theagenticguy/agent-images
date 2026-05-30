@@ -44,8 +44,12 @@ RUN mkdir -p /opt/af/agent-runtime && \
     printf '[project]\nname = "af-agent-runtime"\nversion = "0.0.0"\nrequires-python = ">=3.13"\ndependencies = []\n' \
       > /opt/af/agent-runtime/pyproject.toml
 
-RUN python3 -m pip install --user --no-cache-dir 'tomli-w==1.2.0' && \
-    python3 ./merge_mise.py \
+# Ubuntu 26.04's python3 enforces PEP 668 (externally-managed-environment).
+# Use a throwaway venv just for the merge step rather than --break-system-packages,
+# so the system python stays clean for the agent runtime.
+RUN python3 -m venv /tmp/af-build/.merge-venv && \
+    /tmp/af-build/.merge-venv/bin/pip install --no-cache-dir 'tomli-w==1.2.0' && \
+    /tmp/af-build/.merge-venv/bin/python ./merge_mise.py \
       ./mise/base.toml \
       ./mise/polyglot.toml \
       ./mise/agent-harness.toml \
