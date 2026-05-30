@@ -43,6 +43,7 @@ group "default" {
     "software-agent-polyglot",
     "node-agent-dev",
     "python-agent-dev",
+    "monorepo-agent-dev",
     "jvm-agent-dev",
     "infra-agent-dev",
     "security-agent-dev",
@@ -115,6 +116,19 @@ target "python-agent-dev" {
     "agent-images/software-agent-polyglot:local" = "target:software-agent-polyglot"
   }
   tags = ["${REGISTRY}/python-agent-dev:${VERSION}"]
+}
+
+target "monorepo-agent-dev" {
+  inherits   = ["_common"]
+  context    = "."
+  dockerfile = "images/monorepo-agent-dev/Dockerfile"
+  args = {
+    BASE_IMAGE = "agent-images/software-agent-polyglot:local"
+  }
+  contexts = {
+    "agent-images/software-agent-polyglot:local" = "target:software-agent-polyglot"
+  }
+  tags = ["${REGISTRY}/monorepo-agent-dev:${VERSION}"]
 }
 
 target "jvm-agent-dev" {
