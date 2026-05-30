@@ -55,18 +55,25 @@ RUN python3 -m venv /tmp/af-build/.merge-venv && \
       ./mise/agent-harness.toml \
       /opt/af/mise.toml
 
-RUN mise trust /opt/af/mise.toml
+# Make /opt/af/mise.toml the active mise config by linking it into the
+# default global location. mise removed the `--config` flag in 2026.x;
+# MISE_CONFIG_FILE env var works but linking is more reliable across
+# every entrypoint (interactive shells, ENTRYPOINT, RUN steps).
+RUN mkdir -p /home/agent/.config/mise && \
+    ln -sf /opt/af/mise.toml /home/agent/.config/mise/config.toml && \
+    mise trust /opt/af/mise.toml && \
+    mise trust /home/agent/.config/mise/config.toml
 
 RUN --mount=type=cache,target=/home/agent/.cache/mise,uid=1000,gid=1000 \
     --mount=type=cache,target=/home/agent/.cache/uv,uid=1000,gid=1000 \
     --mount=type=cache,target=/home/agent/.cache/pnpm/store,uid=1000,gid=1000 \
-    mise --config /opt/af/mise.toml install --yes
+    mise install --yes
 
 # Smoke checks: tools resolve and MCP server responds to initialize.
-RUN mise --config /opt/af/mise.toml run base-smoke && \
-    mise --config /opt/af/mise.toml run polyglot-smoke && \
-    mise --config /opt/af/mise.toml run agent-smoke
+RUN mise run base-smoke && \
+    mise run polyglot-smoke && \
+    mise run agent-smoke
 
 WORKDIR /workspace
-ENTRYPOINT ["mise", "--config", "/opt/af/mise.toml", "exec", "--"]
+ENTRYPOINT ["mise", "exec", "--"]
 CMD ["bash"]

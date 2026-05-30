@@ -63,7 +63,9 @@ ENV MISE_CONFIG_DIR=/home/${USERNAME}/.config/mise
 ENV MISE_CACHE_DIR=/home/${USERNAME}/.cache/mise
 ENV PATH=/home/${USERNAME}/.local/bin:/home/${USERNAME}/.local/share/mise/shims:${PATH}
 
-RUN curl -fsSL https://mise.run | sh
+# Pin mise to a known-good version. Bump deliberately when mise's CLI shifts.
+ARG MISE_VERSION=v2026.5.16
+RUN curl -fsSL "https://mise.run" | MISE_VERSION="${MISE_VERSION}" sh
 
 USER root
 RUN mkdir -p /opt/af /workspace /evidence && \

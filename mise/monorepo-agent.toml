@@ -21,9 +21,6 @@ node = "24.0.0"
 "npm:turbo" = "2.5.0"
 "npm:nx" = "20.7.2"
 
-# Repo navigation tooling — heavy use in monorepos
-"aqua:tj-actions/changed-files" = "47.0.0"
-
 [tasks.deps]
 description = "Install both Python and Node dependencies."
 run = """

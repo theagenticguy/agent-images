@@ -46,15 +46,15 @@ RUN python3 ./merge_mise.py \
     ./mise/monorepo-agent.toml \
     /opt/af/mise.toml
 
-RUN mise trust /opt/af/mise.toml
+RUN ln -sf /opt/af/mise.toml /home/agent/.config/mise/config.toml && mise trust /opt/af/mise.toml && mise trust /home/agent/.config/mise/config.toml
 
 RUN --mount=type=cache,target=/home/agent/.cache/mise,uid=1000,gid=1000 \
     --mount=type=cache,target=/home/agent/.cache/uv,uid=1000,gid=1000 \
     --mount=type=cache,target=/home/agent/.cache/pnpm/store,uid=1000,gid=1000 \
-    mise --config /opt/af/mise.toml install --yes
+    mise install --yes
 
-RUN mise --config /opt/af/mise.toml run agent-smoke
+RUN mise run agent-smoke
 
 WORKDIR /workspace
-ENTRYPOINT ["mise", "--config", "/opt/af/mise.toml", "exec", "--"]
+ENTRYPOINT ["mise", "exec", "--"]
 CMD ["bash"]
