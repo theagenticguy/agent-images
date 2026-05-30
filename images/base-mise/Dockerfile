@@ -37,7 +37,12 @@ RUN apt-get update && \
       python3-venv && \
     rm -rf /var/lib/apt/lists/*
 
-RUN groupadd --gid ${USER_GID} ${USERNAME} && \
+# Ubuntu 24.04+ ships with a default `ubuntu:1000` user. Reuse uid/gid 1000
+# by deleting that user first, then create our `agent` user at the same ids
+# so cache mounts and Dockerfile uid/gid args stay consistent.
+RUN if id -u 1000 >/dev/null 2>&1; then userdel -r "$(id -un 1000)" 2>/dev/null || true; fi && \
+    if getent group 1000 >/dev/null 2>&1; then groupdel "$(getent group 1000 | cut -d: -f1)" 2>/dev/null || true; fi && \
+    groupadd --gid ${USER_GID} ${USERNAME} && \
     useradd --uid ${USER_UID} --gid ${USER_GID} -m -s /bin/bash ${USERNAME} && \
     echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USERNAME} && \
     chmod 0440 /etc/sudoers.d/${USERNAME}

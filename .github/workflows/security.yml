@@ -52,7 +52,7 @@ jobs:
       - name: uv sync
         run: uv sync --frozen
       - name: OSV scanner
-        uses: google/osv-scanner-action/osv-scanner-action@v2
+        uses: google/osv-scanner-action/osv-scanner-action@v2.2.4
         with:
           scan-args: |-
             --recursive
