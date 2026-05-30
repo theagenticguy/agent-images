@@ -1,14 +1,29 @@
 # Architecture
 
-> Placeholder. Document the ERPAVal phases (Explore → Research → Plan → Act → Validate → Compound) and how they map to module boundaries here.
+> Placeholder for the agent-images platform architecture. The image tree and build pipeline land in follow-up commits.
 
-## Phases
+## Image tree (planned)
 
-- **Explore** — `src/erpaval/explore/` — Lightweight reconnaissance.
-- **Research** — `src/erpaval/research/` — Grounding via Context7 / docs / code search.
-- **Plan** — `src/erpaval/plan/` — EARS specs, task decomposition.
-- **Act** — `src/erpaval/act/` — Subagent execution + write protocol.
-- **Validate** — `src/erpaval/validate/` — Type-check, lint, test, smoke.
-- **Compound** — `src/erpaval/compound/` — Lesson capture into `.erpaval/solutions/`.
+```text
+agent-images/base-mise
+  └─ agent-images/software-agent-polyglot
+       ├─ agent-images/node-agent-dev
+       ├─ agent-images/python-agent-dev
+       ├─ agent-images/jvm-agent-dev
+       ├─ agent-images/infra-agent-dev
+       └─ agent-images/security-agent-dev
+```
 
-Each phase is a standalone module with a stable input/output contract so they can be reordered, skipped, or swapped per the adaptive classifier's decision.
+`base-mise` lands the OS, mise, and core CLI tools. `software-agent-polyglot` adds polyglot runtimes and the agent harness (claude-code, opencode-ai, Context7 MCP). Each `*-agent-dev` family layer adds the lint/typecheck/test toolchain for its ecosystem and the standard `mise run af-validate-fast` / `af-validate-ci` task contract.
+
+## Build pipeline (planned)
+
+- `docker-bake.hcl` orchestrates the tree.
+- BuildKit registry cache (`type=registry,mode=max`) for cache reuse across CI and dev.
+- ARM64 default for AgentCore-bound images, multi-arch matrix later.
+- Per-image smoke harness — tool smoke (`mise run *-smoke`) + runtime smoke (real JSON-RPC over Context7 stdio MCP, plus an end-to-end agent loop against a fixture).
+- Image manifest YAML registered in the catalog with `mise_config_digest`, image digest, and capabilities.
+
+## Repo helpers
+
+`src/agent_images/` will house the small Python helpers that glue the pipeline together: mise TOML merger, image-manifest renderer, smoke-harness runner.

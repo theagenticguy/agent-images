@@ -72,7 +72,7 @@ The pytest config fails the build below 80% coverage. New code should ship with 
 
 ## Reporting security issues
 
-Use [GitHub Security Advisories](https://github.com/lalsaado/erpaval/security/advisories/new). Do **not** open a public issue for vulnerabilities. See [SECURITY.md](SECURITY.md).
+Use [GitHub Security Advisories](https://github.com/lalsaado/agent-images/security/advisories/new). Do **not** open a public issue for vulnerabilities. See [SECURITY.md](SECURITY.md).
 
 ## Code of Conduct
 

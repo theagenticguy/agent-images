@@ -1,12 +1,19 @@
 [project]
-name = "erpaval"
+name = "agent-images"
 version = "0.1.0"
-description = "ERPAVal — Explore, Research, Plan, Act, Validate methodology toolkit."
+description = "Container image platform for coding agents — base, polyglot, and per-family dev images."
 readme = "README.md"
 requires-python = ">=3.13"
 license = { text = "Apache-2.0" }
 authors = [{ name = "Laith Al-Saadoon", email = "lalsaado@amazon.com" }]
-keywords = ["agentic", "coding-agent", "methodology", "erpaval"]
+keywords = [
+  "agentic",
+  "coding-agent",
+  "container-images",
+  "docker",
+  "buildkit",
+  "mise",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
@@ -14,22 +21,23 @@ classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.13",
   "Topic :: Software Development",
+  "Topic :: System :: Software Distribution",
   "Typing :: Typed",
 ]
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/lalsaado/erpaval"
-Repository = "https://github.com/lalsaado/erpaval"
-Issues = "https://github.com/lalsaado/erpaval/issues"
-Changelog = "https://github.com/lalsaado/erpaval/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/lalsaado/agent-images"
+Repository = "https://github.com/lalsaado/agent-images"
+Issues = "https://github.com/lalsaado/agent-images/issues"
+Changelog = "https://github.com/lalsaado/agent-images/blob/main/CHANGELOG.md"
 
 [build-system]
 requires = ["hatchling>=1.27"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/erpaval"]
+packages = ["src/agent_images"]
 
 [dependency-groups]
 dev = [
@@ -99,7 +107,7 @@ addopts = [
   "-ra",
   "--strict-config",
   "--strict-markers",
-  "--cov=erpaval",
+  "--cov=agent_images",
   "--cov-report=term-missing",
   "--cov-report=xml",
   "--cov-fail-under=80",
@@ -109,7 +117,7 @@ filterwarnings = ["error"]
 
 [tool.coverage.run]
 branch = true
-source = ["src/erpaval"]
+source = ["src/agent_images"]
 parallel = true
 
 [tool.coverage.report]

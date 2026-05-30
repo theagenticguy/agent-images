@@ -1,7 +1,7 @@
 # Extends the default gitleaks ruleset with project-specific allowlists.
 # Default rules are inherited automatically.
 
-title = "erpaval gitleaks config"
+title = "agent-images gitleaks config"
 
 [extend]
 useDefault = true
@@ -14,4 +14,4 @@ paths = [
   '''tests/fixtures/.*''',
   '''\.env\.example''',
 ]
-regexes = ['''ERPAVAL_LOG_LEVEL=INFO''']
+regexes = ['''AGENT_IMAGES_LOG_LEVEL=INFO''']

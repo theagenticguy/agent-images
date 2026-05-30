@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Use **[GitHub Security Advisories](https://github.com/lalsaado/erpaval/security/advisories/new)** to report security issues privately. Do **not** open a public issue.
+Use **[GitHub Security Advisories](https://github.com/lalsaado/agent-images/security/advisories/new)** to report security issues privately. Do **not** open a public issue.
 
 We aim to acknowledge reports within 2 business days and ship a fix or mitigation within 30 days for high-severity issues.
 

@@ -14,4 +14,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Conventional Commits 1.0.0 enforcement via commit-msg hook.
 - Dependabot weekly grouped updates for uv and GitHub Actions.
 
-[Unreleased]: https://github.com/lalsaado/erpaval/compare/HEAD...HEAD
+[Unreleased]: https://github.com/lalsaado/agent-images/compare/HEAD...HEAD

@@ -1,4 +1,4 @@
-from erpaval import __version__
+from agent_images import __version__
 
 
 def test_version_is_semver_like() -> None:

@@ -1,10 +1,10 @@
-# erpaval
+# agent-images
 
-> **E**xplore · **R**esearch · **P**lan · **A**ct · **Val**idate — an adaptive methodology for autonomous software development with coding agents.
+> Container image platform for coding agents. Base, polyglot, and per-family dev images, built with mise-pinned toolchains and BuildKit registry cache.
 
-[![CI](https://github.com/lalsaado/erpaval/actions/workflows/ci.yml/badge.svg)](https://github.com/lalsaado/erpaval/actions/workflows/ci.yml)
-[![Security](https://github.com/lalsaado/erpaval/actions/workflows/security.yml/badge.svg)](https://github.com/lalsaado/erpaval/actions/workflows/security.yml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/lalsaado/erpaval/badge)](https://securityscorecards.dev/viewer/?uri=github.com/lalsaado/erpaval)
+[![CI](https://github.com/lalsaado/agent-images/actions/workflows/ci.yml/badge.svg)](https://github.com/lalsaado/agent-images/actions/workflows/ci.yml)
+[![Security](https://github.com/lalsaado/agent-images/actions/workflows/security.yml/badge.svg)](https://github.com/lalsaado/agent-images/actions/workflows/security.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/lalsaado/agent-images/badge)](https://securityscorecards.dev/viewer/?uri=github.com/lalsaado/agent-images)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -12,8 +12,8 @@
 ## Quick start
 
 ```bash
-git clone https://github.com/lalsaado/erpaval.git
-cd erpaval
+git clone https://github.com/lalsaado/agent-images.git
+cd agent-images
 mise install        # installs python, uv, lefthook, gitleaks, etc.
 mise run install    # uv sync + lefthook install
 mise run validate   # full local quality gate
@@ -39,8 +39,8 @@ mise run validate   # full local quality gate
 ## Layout
 
 ```text
-erpaval/
-├── src/erpaval/        # Package source
+agent-images/
+├── src/agent_images/   # Build helpers, manifest renderers, smoke harness
 ├── tests/              # Pytest suite
 ├── docs/               # Long-form documentation
 ├── scripts/            # Repo automation (commit-msg validator, etc.)
@@ -51,6 +51,8 @@ erpaval/
 ├── .gitleaks.toml      # Secret scan rules
 └── .editorconfig       # Editor normalization
 ```
+
+The image tree itself (`images/base-mise/`, `images/software-agent-polyglot/`, etc.) and the `docker-bake.hcl` pipeline land in follow-up commits — see [docs/architecture.md](docs/architecture.md) for the planned layout.
 
 ## Daily commands
 
