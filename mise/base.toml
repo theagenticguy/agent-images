@@ -1,0 +1,42 @@
+[settings]
+yes = true
+experimental = true
+idiomatic_version_file_enable_tools = [ "node", "python", "ruby" ]
+
+[env]
+AF_HOME = "/opt/af"
+AF_WORKSPACE_ROOT = "/workspace"
+AF_EVIDENCE_ROOT = "/evidence"
+AF_CACHE_ROOT = "/home/agent/.cache"
+MISE_DATA_DIR = "/home/agent/.local/share/mise"
+MISE_CACHE_DIR = "/home/agent/.cache/mise"
+MISE_CONFIG_DIR = "/home/agent/.config/mise"
+PYTHONDONTWRITEBYTECODE = "1"
+PIP_DISABLE_PIP_VERSION_CHECK = "1"
+UV_LINK_MODE = "copy"
+
+_.path = [
+  "/opt/af/bin",
+  "/opt/af/agent-runtime/.venv/bin",
+  "/home/agent/.local/bin",
+  "/home/agent/.local/share/mise/shims",
+]
+
+[tools]
+"aqua:BurntSushi/ripgrep" = "14.1.1"
+"aqua:sharkdp/fd" = "10.2.0"
+"aqua:jqlang/jq" = "1.7.1"
+"aqua:mikefarah/yq" = "4.45.1"
+"aqua:sharkdp/bat" = "0.25.0"
+"aqua:eza-community/eza" = "0.20.21"
+"aqua:ast-grep/ast-grep" = "0.36.2"
+
+[tasks.base-smoke]
+description = "Verify base CLI tools."
+run = """
+rg --version
+fd --version
+jq --version
+yq --version
+ast-grep --version
+"""

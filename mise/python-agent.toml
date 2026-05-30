@@ -1,0 +1,49 @@
+[env]
+AF_IMAGE_PROFILE = "python-agent-dev"
+
+[tools]
+python = "3.13.3"
+uv = "0.7.8"
+"pipx:ruff" = "latest"
+"pipx:mypy" = "latest"
+"pipx:pre-commit" = "latest"
+
+[tasks.deps]
+description = "Install Python dependencies."
+run = "uv sync --frozen"
+
+[tasks.format-check]
+run = "ruff format --check ."
+
+[tasks.lint]
+run = "ruff check ."
+
+[tasks.typecheck]
+run = "mypy src tests || pyright"
+
+[tasks.test]
+run = "pytest -q"
+
+[tasks.test-affected]
+run = "pytest -q"
+
+[tasks.precommit-check]
+run = "pre-commit run --all-files"
+
+[tasks.af-validate-fast]
+depends = [
+  "format-check",
+  "lint",
+  "typecheck",
+  "test-affected",
+  "precommit-check",
+]
+
+[tasks.af-validate-ci]
+depends = [
+  "format-check",
+  "lint",
+  "typecheck",
+  "test",
+  "precommit-check",
+]

@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "context7": {
+      "type": "stdio",
+      "command": "context7-mcp",
+      "args": [],
+      "env": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    }
+  }
+}

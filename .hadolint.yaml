@@ -1,0 +1,21 @@
+# Hadolint config for agent-images.
+# https://github.com/hadolint/hadolint#configure
+
+ignored:
+  # ARG-based FROM tags with explicit defaults are checked at build time
+  # via docker-bake.hcl, not in the Dockerfile itself.
+  - DL3006
+  # Two RUN steps (mise install + smoke) is intentional — caching the install
+  # layer is more valuable than fewer layers.
+  - DL3059
+
+failure-threshold: warning
+
+trustedRegistries:
+  - docker.io
+  - ghcr.io
+  - public.ecr.aws
+
+label-schema:
+  org.opencontainers.image.source: text
+  org.opencontainers.image.licenses: text

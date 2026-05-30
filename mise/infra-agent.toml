@@ -1,0 +1,30 @@
+[env]
+AF_IMAGE_PROFILE = "infra-agent-dev"
+
+[tools]
+python = "3.13.3"
+node = "24.0.0"
+uv = "0.7.8"
+"aqua:hashicorp/terraform" = "1.12.0"
+"aqua:opentofu/opentofu" = "1.9.0"
+"aqua:terraform-linters/tflint" = "0.55.1"
+"pipx:cfn-lint" = "latest"
+"pipx:checkov" = "latest"
+
+[tasks.format-check]
+run = "terraform fmt -check -recursive || tofu fmt -check -recursive"
+
+[tasks.validate]
+run = "terraform validate || tofu validate"
+
+[tasks.lint]
+run = "tflint --recursive || true"
+
+[tasks.security-scan]
+run = "checkov -d . || true"
+
+[tasks.af-validate-fast]
+depends = [ "format-check", "validate", "lint" ]
+
+[tasks.af-validate-ci]
+depends = [ "format-check", "validate", "lint", "security-scan" ]

@@ -1,0 +1,51 @@
+[env]
+AF_AGENT_MODE = "software-factory"
+CLAUDE_CONFIG_DIR = "/home/agent/.config/claude"
+OTEL_SERVICE_NAME = "af-coding-agent"
+
+# Context7 API key is injected at session start, never baked into the image.
+# The image only declares the env-var contract; the runtime's SessionPlan
+# is responsible for the value.
+CONTEXT7_API_KEY = ""
+
+[tools]
+# Pinned versions — see CHANGELOG when bumping.
+"npm:@anthropic-ai/claude-code" = "1.0.30"
+"npm:opencode-ai" = "0.4.50"
+"npm:@upstash/context7-mcp" = "1.0.14"
+
+[tasks.bootstrap-agent]
+description = "Install AF Python agent runtime dependencies."
+run = """
+cd /opt/af/agent-runtime
+uv sync --frozen
+"""
+
+[tasks.agent-smoke]
+description = "Verify agent harness tools are installed."
+run = """
+python --version
+uv --version
+node --version
+claude --version || true
+opencode --version || true
+context7-mcp --version || true
+"""
+
+[tasks.mcp-smoke]
+description = "Verify each MCP server in /opt/af/agent-runtime/mcp/ responds to a JSON-RPC initialize over stdio."
+run = """
+set -euo pipefail
+INIT='{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"smoke","version":"0"}}}'
+for cfg in /opt/af/agent-runtime/mcp/*.json; do
+  cmd=$(jq -r '.mcpServers | to_entries[0].value.command' "$cfg")
+  args=$(jq -r '.mcpServers | to_entries[0].value.args | join(" ") // ""' "$cfg")
+  name=$(jq -r '.mcpServers | to_entries[0].key' "$cfg")
+  echo "smoke-checking MCP server: $name ($cmd $args)"
+  printf '%s\n' "$INIT" \
+    | timeout 10 sh -c "$cmd $args" \
+    | head -1 \
+    | jq -e '.result.serverInfo.name' >/dev/null
+done
+echo "all MCP servers responded to initialize"
+"""

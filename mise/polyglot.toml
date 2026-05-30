@@ -1,0 +1,29 @@
+[tools]
+python = "3.13.3"
+uv = "0.7.8"
+node = "24.0.0"
+"npm:pnpm" = "10.11.0"
+go = "1.24.3"
+rust = "1.87.0"
+java = "temurin-21"
+
+[env]
+PNPM_HOME = "/home/agent/.local/share/pnpm"
+PNPM_STORE_DIR = "/home/agent/.cache/pnpm/store"
+CARGO_HOME = "/home/agent/.cargo"
+GOMODCACHE = "/home/agent/.cache/go/pkg/mod"
+GOCACHE = "/home/agent/.cache/go/build"
+GRADLE_USER_HOME = "/home/agent/.gradle"
+MAVEN_OPTS = "-Dmaven.repo.local=/home/agent/.m2/repository"
+
+[tasks.polyglot-smoke]
+description = "Verify polyglot runtimes."
+run = """
+python --version
+uv --version
+node --version
+pnpm --version
+go version
+rustc --version
+java -version
+"""

@@ -1,0 +1,21 @@
+[env]
+AF_IMAGE_PROFILE = "jvm-agent-dev"
+GRADLE_USER_HOME = "/home/agent/.gradle"
+
+[tools]
+java = "temurin-21"
+
+[tasks.deps]
+run = "./gradlew dependencies --no-daemon || mvn -B -DskipTests dependency:go-offline"
+
+[tasks.compile]
+run = "./gradlew compileJava --no-daemon || mvn -B -DskipTests compile"
+
+[tasks.test]
+run = "./gradlew test --no-daemon || mvn -B test"
+
+[tasks.af-validate-fast]
+depends = [ "compile", "test" ]
+
+[tasks.af-validate-ci]
+depends = [ "compile", "test" ]

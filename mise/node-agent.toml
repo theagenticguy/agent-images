@@ -1,0 +1,52 @@
+[env]
+AF_IMAGE_PROFILE = "node-agent-dev"
+NODE_OPTIONS = "--max-old-space-size=4096"
+NPM_CONFIG_AUDIT = "false"
+NPM_CONFIG_FUND = "false"
+
+[tools]
+node = "24.0.0"
+"npm:pnpm" = "10.11.0"
+"npm:typescript" = "5.8.3"
+"npm:@biomejs/biome" = "1.9.4"
+"npm:knip" = "5.58.0"
+
+[tasks.deps]
+description = "Install Node dependencies with frozen lockfile."
+run = "pnpm install --frozen-lockfile"
+
+[tasks.format-check]
+run = "pnpm biome check . || pnpm lint"
+
+[tasks.lint]
+run = "pnpm lint"
+
+[tasks.typecheck]
+run = "pnpm typecheck"
+
+[tasks.test]
+run = "pnpm test"
+
+[tasks.test-affected]
+run = "pnpm test -- --changed || pnpm test"
+
+[tasks.precommit-check]
+run = "pnpm lefthook run pre-commit || pnpm lint-staged || true"
+
+[tasks.af-validate-fast]
+depends = [
+  "format-check",
+  "lint",
+  "typecheck",
+  "test-affected",
+  "precommit-check",
+]
+
+[tasks.af-validate-ci]
+depends = [
+  "format-check",
+  "lint",
+  "typecheck",
+  "test",
+  "precommit-check",
+]

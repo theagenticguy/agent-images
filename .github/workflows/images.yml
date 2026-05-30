@@ -1,0 +1,129 @@
+name: Images
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "images/**"
+      - "mise/**"
+      - "scripts/merge_mise.py"
+      - "docker-bake.hcl"
+      - ".hadolint.yaml"
+      - ".github/workflows/images.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "images/**"
+      - "mise/**"
+      - "scripts/merge_mise.py"
+      - "docker-bake.hcl"
+      - ".hadolint.yaml"
+      - ".github/workflows/images.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: images-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: agent-images
+  VERSION: ci-${{ github.sha }}
+
+jobs:
+  hadolint:
+    name: hadolint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Lint Dockerfiles
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: images/**/Dockerfile
+          recursive: true
+          config: .hadolint.yaml
+          failure-threshold: warning
+
+  bake:
+    name: bake (${{ matrix.target }})
+    runs-on: ubuntu-24.04
+    needs: hadolint
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - base-mise
+          - software-agent-polyglot
+          - node-agent-dev
+          - python-agent-dev
+          - jvm-agent-dev
+          - infra-agent-dev
+          - security-agent-dev
+    steps:
+      - uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: Build ${{ matrix.target }}
+        uses: docker/bake-action@v6
+        env:
+          VCS_REF: ${{ github.sha }}
+          BUILD_DATE: ${{ github.event.head_commit.timestamp }}
+        with:
+          targets: ${{ matrix.target }}
+          load: true
+          set: |
+            *.cache-from=type=gha,scope=images-${{ matrix.target }}
+            *.cache-to=type=gha,scope=images-${{ matrix.target }},mode=max
+
+      - name: Smoke test ${{ matrix.target }}
+        if: matrix.target != 'base-mise'
+        run: |
+          docker run --rm "${REGISTRY}/${{ matrix.target }}:${VERSION}" \
+            bash -lc 'mise --config /opt/af/mise.toml run agent-smoke || mise run agent-smoke'
+
+  validate-merged-toml:
+    name: merged TOML reproducibility
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: step-security/harden-runner@v2
+        with:
+          egress-policy: audit
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: jdx/mise-action@v2
+        with:
+          install: true
+          cache: true
+      - name: uv sync
+        run: uv sync --frozen
+      - name: Render every family's merged mise.toml
+        run: |
+          set -euo pipefail
+          for fam in node-agent python-agent jvm-agent infra-agent security-agent; do
+            uv run python scripts/merge_mise.py \
+              mise/base.toml \
+              mise/polyglot.toml \
+              mise/agent-harness.toml \
+              "mise/${fam}.toml" \
+              "/tmp/merged-${fam}.toml"
+            echo "::group::merged ${fam}"
+            cat "/tmp/merged-${fam}.toml"
+            echo "::endgroup::"
+          done

@@ -1,0 +1,32 @@
+[env]
+AF_IMAGE_PROFILE = "security-agent-dev"
+
+[tools]
+python = "3.13.3"
+node = "24.0.0"
+uv = "0.7.8"
+"aqua:semgrep/semgrep" = "1.96.0"
+"aqua:gitleaks/gitleaks" = "8.24.0"
+"aqua:anchore/syft" = "1.20.0"
+"aqua:aquasecurity/trivy" = "0.62.0"
+
+[tasks.secret-scan]
+run = "gitleaks dir --redact ."
+
+[tasks.sbom]
+run = "syft dir:. -o spdx-json=/evidence/sbom.spdx.json"
+
+[tasks.sast-light]
+run = "semgrep scan --config auto ."
+
+[tasks.image-scan]
+run = """
+test -n "${IMAGE_REF:-}" || { echo 'image-scan requires IMAGE_REF'; exit 2; }
+trivy image "${IMAGE_REF}"
+"""
+
+[tasks.af-validate-fast]
+depends = [ "secret-scan", "sast-light" ]
+
+[tasks.af-validate-ci]
+depends = [ "secret-scan", "sast-light", "sbom" ]
