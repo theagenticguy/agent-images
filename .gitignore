@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing & coverage
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+htmlcov/
+.pytest_cache/
+.hypothesis/
+coverage.xml
+*.cover
+.benchmarks/
+
+# Type checkers / linters
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+.ty_cache/
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+.project
+.pydevproject
+
+# Tools
+.direnv/
+.envrc.local
+mise.local.toml
+.python-version
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+
+# Build artefacts
+*.log
+*.pid
+*.pid.lock
+*.seed
+
+# OS
+Thumbs.db
+
+# Local AI / agent state
+.claude/
+.aider*

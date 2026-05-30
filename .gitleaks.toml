@@ -1,0 +1,17 @@
+# Extends the default gitleaks ruleset with project-specific allowlists.
+# Default rules are inherited automatically.
+
+title = "erpaval gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Project allowlist."
+paths = [
+  '''.*\.lock$''',
+  '''docs/.*\.md$''',
+  '''tests/fixtures/.*''',
+  '''\.env\.example''',
+]
+regexes = ['''ERPAVAL_LOG_LEVEL=INFO''']

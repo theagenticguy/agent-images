@@ -1,0 +1,11 @@
+# Code owners for erpaval. Order matters; later patterns override earlier.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+* @lalsaado
+
+# CI / security configuration changes need extra scrutiny.
+/.github/workflows/ @lalsaado
+/lefthook.yml       @lalsaado
+/.gitleaks.toml     @lalsaado
+/pyproject.toml     @lalsaado
+/mise.toml          @lalsaado

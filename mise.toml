@@ -1,0 +1,70 @@
+[tools]
+python = "3.13.3"
+uv = "0.7.8"
+"aqua:evilmartians/lefthook" = "1.11.0"
+"aqua:gitleaks/gitleaks" = "8.24.0"
+"aqua:google/osv-scanner" = "2.0.0"
+"aqua:hadolint/hadolint" = "2.12.0"
+"npm:markdownlint-cli2" = "0.18.0"
+"aqua:tamasfe/taplo" = "0.10.0"
+
+[env]
+_.python.venv = { path = ".venv", create = true }
+PYTHONDONTWRITEBYTECODE = "1"
+PIP_DISABLE_PIP_VERSION_CHECK = "1"
+UV_LINK_MODE = "copy"
+
+[tasks.install]
+description = "Install dependencies and git hooks."
+run = """
+uv sync
+lefthook install
+"""
+
+[tasks.format]
+description = "Format Python and TOML."
+run = """
+uv run ruff format .
+taplo format
+"""
+
+[tasks.format-check]
+description = "Check formatting."
+run = """
+uv run ruff format --check .
+taplo format --check
+"""
+
+[tasks.lint]
+description = "Lint Python and Markdown."
+run = """
+uv run ruff check .
+markdownlint-cli2 '**/*.md' '#node_modules' '#.venv'
+"""
+
+[tasks.typecheck]
+description = "Typecheck with ty."
+run = "uv run ty check src tests"
+
+[tasks.test]
+description = "Run tests with coverage."
+run = "uv run pytest"
+
+[tasks.test-fast]
+description = "Run tests without coverage."
+run = "uv run pytest --no-cov"
+
+[tasks.security]
+description = "Secret scan + dependency audit."
+run = """
+gitleaks dir --redact .
+osv-scanner scan source --lockfile=uv.lock
+"""
+
+[tasks.validate]
+description = "Full local validation gate."
+depends = ["format-check", "lint", "typecheck", "test", "security"]
+
+[tasks.ci]
+description = "What CI runs."
+depends = ["validate"]
