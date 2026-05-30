@@ -2,6 +2,9 @@
 yes = true
 experimental = true
 idiomatic_version_file_enable_tools = [ "node", "python", "ruby" ]
+# Sigstore TUF cache fights with BuildKit's read-only cache mount during
+# install. Provenance gets verified at the image-promotion layer instead.
+disable_github_artifact_attestations = true
 
 [env]
 AF_HOME = "/opt/af"
