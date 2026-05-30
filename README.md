@@ -2,21 +2,24 @@
 
 > Container image platform for coding agents. Base, polyglot, and per-family dev images, built with mise-pinned toolchains and BuildKit registry cache.
 
-[![CI](https://github.com/lalsaado/agent-images/actions/workflows/ci.yml/badge.svg)](https://github.com/lalsaado/agent-images/actions/workflows/ci.yml)
-[![Security](https://github.com/lalsaado/agent-images/actions/workflows/security.yml/badge.svg)](https://github.com/lalsaado/agent-images/actions/workflows/security.yml)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/lalsaado/agent-images/badge)](https://securityscorecards.dev/viewer/?uri=github.com/lalsaado/agent-images)
+[![CI](https://github.com/theagenticguy/agent-images/actions/workflows/ci.yml/badge.svg)](https://github.com/theagenticguy/agent-images/actions/workflows/ci.yml)
+[![Security](https://github.com/theagenticguy/agent-images/actions/workflows/security.yml/badge.svg)](https://github.com/theagenticguy/agent-images/actions/workflows/security.yml)
+[![Documentation](https://github.com/theagenticguy/agent-images/actions/workflows/docs.yml/badge.svg)](https://github.com/theagenticguy/agent-images/actions/workflows/docs.yml)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/theagenticguy/agent-images/badge)](https://securityscorecards.dev/viewer/?uri=github.com/theagenticguy/agent-images)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
+**Docs:** <https://theagenticguy.github.io/agent-images/>
+
 ## Quick start
 
 ```bash
-git clone https://github.com/lalsaado/agent-images.git
+git clone https://github.com/theagenticguy/agent-images.git
 cd agent-images
-mise install        # installs python, uv, lefthook, gitleaks, etc.
-mise run install    # uv sync + lefthook install
-mise run validate   # full local quality gate
+mise install        # installs python, uv, node, pnpm, lefthook, gitleaks, etc.
+mise run install    # uv sync + pnpm install + lefthook install
+mise run validate   # full local quality gate (incl. docs build)
 ```
 
 ## What's in the box
@@ -35,6 +38,7 @@ mise run validate   # full local quality gate
 | SAST | semgrep + CodeQL | Layered static analysis |
 | Supply chain | [OpenSSF Scorecard](https://scorecards.dev) | Continuous posture scoring |
 | Auto-updates | Dependabot | Weekly grouped PRs for uv + actions |
+| Docs | [Astro Starlight](https://starlight.astro.build) | Static site, AI-friendly, deployed to GitHub Pages |
 
 ## Layout
 
@@ -42,7 +46,10 @@ mise run validate   # full local quality gate
 agent-images/
 ├── src/agent_images/   # Build helpers, manifest renderers, smoke harness
 ├── tests/              # Pytest suite
-├── docs/               # Long-form documentation
+├── docs/               # Astro Starlight site (deploys to GitHub Pages)
+│   ├── astro.config.mjs
+│   ├── package.json
+│   └── src/content/docs/
 ├── scripts/            # Repo automation (commit-msg validator, etc.)
 ├── .github/            # Workflows, templates, CODEOWNERS, dependabot
 ├── mise.toml           # Tool versions + tasks
@@ -52,18 +59,20 @@ agent-images/
 └── .editorconfig       # Editor normalization
 ```
 
-The image tree itself (`images/base-mise/`, `images/software-agent-polyglot/`, etc.) and the `docker-bake.hcl` pipeline land in follow-up commits — see [docs/architecture.md](docs/architecture.md) for the planned layout.
+The image tree itself (`images/base-mise/`, `images/software-agent-polyglot/`, etc.) and the `docker-bake.hcl` pipeline land in follow-up commits — see the [architecture page](https://theagenticguy.github.io/agent-images/reference/architecture/) for the planned layout.
 
 ## Daily commands
 
 ```bash
-mise run install      # install deps + git hooks
-mise run format       # auto-fix formatting
-mise run lint         # ruff + markdownlint
-mise run typecheck    # ty
-mise run test         # pytest with coverage
-mise run security     # gitleaks + osv-scanner
-mise run validate     # everything CI runs
+mise run install        # install deps + git hooks
+mise run format         # auto-fix formatting
+mise run lint           # ruff + markdownlint
+mise run typecheck      # ty
+mise run test           # pytest with coverage
+mise run security       # gitleaks + osv-scanner
+mise run docs-dev       # local docs server
+mise run docs-build     # build the docs site
+mise run validate       # everything CI runs (incl. docs build)
 ```
 
 ## Contributing

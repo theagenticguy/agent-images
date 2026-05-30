@@ -1,0 +1,73 @@
+---
+title: agent-images
+description: Container image platform for coding agents — base, polyglot, and per-family dev images.
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+**Container image platform for coding agents — base, polyglot, and per-family dev images, built with mise-pinned toolchains and BuildKit registry cache.**
+
+---
+
+## Overview
+
+agent-images builds the container image fleet that coding agents (Claude Code, OpenCode, Codex, AgentCore-hosted runtimes) boot into. Images are organized as a small inheritance tree: a base layer with the OS and CLI tools, a polyglot layer with every common runtime plus the agent harness (Context7 MCP included), and per-family `*-agent-dev` layers tuned for Node, Python, JVM, infra, and security work.
+
+Each image declares a uniform task contract via mise (`af-validate-fast`, `af-validate-ci`) so agents drive any ecosystem the same way.
+
+---
+
+## Why this exists
+
+| Pain | Solution |
+|---|---|
+| Agents reinvent dev environments per repo | One catalog of pinned, scanned, smoke-tested images |
+| Build/cache reuse is repo-local | BuildKit registry cache shared across CI and dev |
+| MCP servers are discovered ad-hoc | Context7 MCP baked into the harness layer |
+| "Slim" images get optimized too early | Trigger criteria gate slim/builder splits on telemetry |
+| Image promotion is by tag string | Immutable digests + named catalog profiles |
+
+---
+
+## Image tree
+
+```text
+agent-images/base-mise
+  └─ agent-images/software-agent-polyglot
+       ├─ agent-images/node-agent-dev
+       ├─ agent-images/python-agent-dev
+       ├─ agent-images/jvm-agent-dev
+       ├─ agent-images/infra-agent-dev
+       └─ agent-images/security-agent-dev
+```
+
+---
+
+## Quick links
+
+<CardGrid>
+  <Card title="Getting Started">
+    Build the image tree locally, run a smoke harness, and pull your first
+    family image.
+
+    [Quick start](/agent-images/getting-started/)
+  </Card>
+  <Card title="Build Guide">
+    Dockerfile patterns, mise TOML merge model, BuildKit registry cache, and
+    docker-bake.hcl.
+
+    [Build guide](/agent-images/build-guide/)
+  </Card>
+  <Card title="Operator Guide">
+    Promote images, register catalog manifests, run hotspot telemetry, and
+    decide when to slim.
+
+    [Operator guide](/agent-images/operator-guide/)
+  </Card>
+  <Card title="Developer Guide">
+    Add a new family image, wire a new MCP server into the harness, contribute
+    a smoke harness for a new agent runtime.
+
+    [Developer guide](/agent-images/developer-guide/)
+  </Card>
+</CardGrid>

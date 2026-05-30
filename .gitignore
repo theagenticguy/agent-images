@@ -75,3 +75,8 @@ Thumbs.db
 # Local AI / agent state
 .claude/
 .aider*
+
+# Docs (Astro / pnpm)
+docs/node_modules/
+docs/dist/
+docs/.astro/

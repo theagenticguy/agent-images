@@ -1,4 +1,9 @@
-# Architecture
+---
+title: Architecture
+description: Planned image tree, build pipeline, and helper layout for agent-images.
+sidebar:
+  order: 2
+---
 
 > Placeholder for the agent-images platform architecture. The image tree and build pipeline land in follow-up commits.
 
